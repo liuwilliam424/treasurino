@@ -7,7 +7,6 @@ Welcome to Treasurino, the ultimate Local Treasure Map! This full-stack web appl
 - **Frontend:** HTML, CSS, and JavaScript with Leaflet.js for map integration.
 - **Backend:** Node.js with Express for server-side logic and API handling.
 - **Database:** SQLite for persistent data storage.
-- **Deployment:** Vercel for seamless and scalable web deployment.
 
 ---
 
