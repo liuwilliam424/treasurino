@@ -78,31 +78,35 @@
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        fetch('/api/treasures')
-    .then(response => response.json())
-    .then(treasures => {
-        treasures.forEach(treasure => {
-            L.marker([treasure.lat, treasure.lng]).addTo(map)
-                .bindPopup(`<b>${treasure.title}</b><br>${treasure.description}`);
+        function fetchTreasures() {
+            fetch('/api/treasures')
+                .then(response => response.json())
+                .then(treasures => {
+                    treasures.forEach(treasure => {
+                        L.marker([treasure.lat, treasure.lng]).addTo(map)
+                            .bindPopup(`<b>${treasure.title}</b><br>${treasure.description}`);
+                    });
+                });
+        }
+
+        fetchTreasures();
+
+        document.getElementById('add-treasure-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const lat = document.getElementById('lat').value;
+            const lng = document.getElementById('lng').value;
+
+            fetch('/api/add-treasure', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, description, lat, lng })
+            }).then(() => {
+                fetchTreasures(); // Fetch and display treasures after adding a new one
+                location.reload();
+            });
         });
-    });
-
-document.getElementById('add-treasure-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const title = document.getElementById('title').value;
-    const description = document.getElementById('description').value;
-    const lat = document.getElementById('lat').value;
-    const lng = document.getElementById('lng').value;
-
-    fetch('/api/add-treasure', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, description, lat, lng })
-    }).then(() => {
-        location.reload();
-    });
-});
-
     </script>
 </body>
 </html>
